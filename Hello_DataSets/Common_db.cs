@@ -32,10 +32,26 @@ namespace Hello_DataSets
                     SqlCommand cmd = new SqlCommand(sqlExpression, conn);
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     adapter.Fill(usr_table);
-                    // users.PrimaryKey = new DataColumn[] { users.Columns["Id"] };
-                    usr_table.PrimaryKey = new DataColumn[] { usr_table.Columns[key] };
+                    usr_table.PrimaryKey = new DataColumn[] { usr_table.Columns[key]};
                     cmd.ExecuteNonQuery();
-                    result = true;
+                    DataRow row = usr_table.NewRow();
+                    row = usr_table.Rows.Find(key_value);
+
+                    string sql = $"DELETE {usr_table.TableName} WHERE {key} = {key_value}";
+                    try
+                    {
+                        conn.Open();
+                        //conn.CreateCommand().ExecuteNonQuery();
+                        adapter.Update(usr_table);
+                        cmd.CommandText = sql;
+                        cmd.ExecuteNonQuery();
+                        result = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        result = false;
+                        Console.WriteLine(ex);
+                    }
                 }
             }
             catch (Exception ex)
@@ -52,14 +68,10 @@ namespace Hello_DataSets
         // define its CommandText like sql query to select all from "usr_table.tablename" from database
         // create SqlDataAdapter object associated with SqlCommand object
         // populate usr_table by data from database
-
-
-
         // define usr_table primary key by new DataColumn[], initiate it by key value
-
         // accept changes for usr_table
-
         //define DataRow object as the usr_table row with key value which equals key_value
+
 
         // create string for sql query to delete this row in the database table
 
