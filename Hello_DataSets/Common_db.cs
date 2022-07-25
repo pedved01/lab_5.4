@@ -13,43 +13,47 @@ namespace Hello_DataSets
         // define string MyConnectionString
         // implement Common_db constructor with string parameter for connection string
         string MyConnectionString = "Server=DESKTOP-DG6R9KV;Database=Base1 ;Trusted_Connection=True;";
-        string sql_command;
+        string sqlExpression;
         public Common_db(string parametr)
         {
             MyConnectionString = parametr;
         }
         // implement bool MyTable_delete(DataTable usr_table, string key, string key_value) method
         // with parameters fot DataTable , string key name, string key value to delete row
-        public  bool MyTable_delete(DataTable usr_table, string key, string key_value)
+        public bool MyTable_delete(DataTable usr_table, string key, string key_value)
         {
             bool result = false;
             try
             {
-                 using ( SqlConnection conn = new SqlConnection(MyConnectionString))
+                using (SqlConnection conn = new SqlConnection(MyConnectionString))
                 {
-                    sql_command = $" select all from {usr_table.tablename} from database";
+                    sqlExpression = $"sql query to select all from {usr_table.TableName} from Base1";
                     conn.Open();
-                    SqlCommand cmd = conn.CreateCommand();
+                    SqlCommand cmd = new SqlCommand(sqlExpression, conn);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(usr_table);
+                    // users.PrimaryKey = new DataColumn[] { users.Columns["Id"] };
+                    usr_table.PrimaryKey = new DataColumn[] { usr_table.Columns[key] };
+                    cmd.ExecuteNonQuery();
                     result = true;
                 }
-            }                                                                          
-            catch (Exception ex)                                                       
-            {                                                                          
-                Console.WriteLine(ex);                                                 
-                result = false;                                                        
-            }                                                                          
-            return result;                                                             
-        }                                                                              
- 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                result = false;
+            }
+            return result;
+        }
+
         // define bool result and initiate it with false
         // in try-catch block implement using block for work new SglConnection with connection string MyConnectionString
-
         // create SqlCommand object for SglConnection object
         // define its CommandText like sql query to select all from "usr_table.tablename" from database
-
         // create SqlDataAdapter object associated with SqlCommand object
-
         // populate usr_table by data from database
+
+
 
         // define usr_table primary key by new DataColumn[], initiate it by key value
 
@@ -75,6 +79,9 @@ namespace Hello_DataSets
 
         // exception message output
         // return false
+
+
+
 
 
 
