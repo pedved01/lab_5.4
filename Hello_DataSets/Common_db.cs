@@ -42,7 +42,7 @@ namespace Hello_DataSets
                     {
                         conn.Open();
                         //conn.CreateCommand().ExecuteNonQuery();
-                        adapter.Update(usr_table);
+                        adapter.Update(usr_table); 
                         cmd.CommandText = sql;
                         cmd.ExecuteNonQuery();
                         result = true;
